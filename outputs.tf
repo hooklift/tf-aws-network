@@ -26,11 +26,4 @@ output "common_security_group_id" {
 	value = "${aws_security_group.common.id}"
 }
 
-output "private_dns_zone_id" {
-	value = "${aws_route53_zone.private.id}"
-}
-
-output "private_dns_zone_name" {
-	value = "${aws_route53_zone.private.name}"
-}
 
