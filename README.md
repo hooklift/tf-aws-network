@@ -1,6 +1,6 @@
-# Hooklift AWS network
+# Terraform AWS Network module
 
-In order to work on network changes you first need to pull the current state by running: 
+It creates a VPC with private and public subnets spread out in multiple availability zones.
 
 terraform remote config -backend=s3 \
 -backend-config="bucket=hooklift-infra" \
