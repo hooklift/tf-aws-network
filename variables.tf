@@ -1,23 +1,34 @@
 variable "vpc_cidr" {
-	description = "VPC IP address range."
+  type        = "string"
+  description = "VPC's CIDR block"
 }
 
-variable "subnets_number" {
-	description = "Number of subnets to use, one per availability zone."
+variable "vpc_dns_support" {
+  type        = "string"
+  description = "Whether to enable or disable VPC DNS support"
+  default     = "true"
 }
 
-variable "public_cidr" {
-	description = "List of public IP ranges for the different availability zones"
+variable "vpc_dns_hostnames" {
+  type        = "string"
+  description = "Whether to enable or disable VPC DNS support for host names"
+  default     = "true"
 }
 
-variable "private_cidr" {
-	description = "List of private IP ranges for cell nodes in the different availability zones."
+variable "public_subnets" {
+  type        = "list"
+  description = "List of public subnets for the different availability zones, in CIDR format."
+  default     = []
+}
+
+variable "private_subnets" {
+  type        = "list"
+  description = "List of private subnets for the different availability zones, in CIDR format."
+  default     = []
 }
 
 variable "zones" {
-	description = "Comma-separated list of availability zones to use."
-}
-
-variable "region" {
-	description = "The region of AWS where operations will take place."
+  type        = "list"
+  description = "List of availability zones to use."
+  default     = []
 }
