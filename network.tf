@@ -1,33 +1,6 @@
-resource "aws_security_group" "common" {
-  name        = "common_rules"
-  description = "Common rules used across all machines."
-  vpc_id      = "${aws_vpc.main.id}"
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    protocol    = "icmp"
-    from_port   = -1
-    to_port     = -1
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_vpc" "main" {
-  cidr_block = "${var.vpc_cidr}"
-
+  cidr_block           = "${var.vpc_cidr}"
+  instance_tenancy     = "${var.vpc_tenancy}"
   enable_dns_support   = "${var.vpc_dns_support}"
   enable_dns_hostnames = "${var.vpc_dns_hostnames}"
 }
@@ -46,7 +19,7 @@ resource "aws_eip" "nat_gateway" {
 // We place a NAT gateway in the public network of each availability zone,
 // for private networks to use.
 resource "aws_nat_gateway" "gateway" {
-  count         = "${lenght(var.public_subnets)}"
+  count         = "${length(var.public_subnets)}"
   allocation_id = "${element(aws_eip.nat_gateway.*.id, count.index)}"
   subnet_id     = "${element(aws_subnet.public.*.id, count.index)}"
   depends_on    = ["aws_internet_gateway.main", "aws_eip.nat_gateway"]

@@ -21,7 +21,3 @@ output "public_cidr_blocks" {
 output "private_cidr_blocks" {
   value = ["${aws_subnet.private.*.cidr_block}"]
 }
-
-output "common_security_group_id" {
-  value = "${aws_security_group.common.id}"
-}
