@@ -24,18 +24,18 @@ variable "vpc_dns_hostnames" {
 
 variable "public_subnets" {
   type        = "list"
-  description = "List of public subnets for the different availability zones, in CIDR format."
+  description = "List of public subnets to create, one per each availability zone, in CIDR format."
   default     = ["10.0.32.0/20", "10.0.96.0/20", "10.0.160.0/20"]
 }
 
 variable "private_subnets" {
   type        = "list"
-  description = "List of private subnets for the different availability zones, in CIDR format."
+  description = "List of private subnets to create, one per each availability zone, in CIDR format."
   default     = ["10.0.0.0/19", "10.0.64.0/19", "10.0.128.0/19"]
 }
 
 variable "zones" {
   type        = "list"
-  description = "List of availability zones to use."
+  description = "List of availability zones to use. Make sure it is equal or greater than the number of subnets"
   default     = ["us-east-1a", "us-east-1e", "us-east-1c"]
 }

@@ -20,8 +20,8 @@ resource "aws_eip" "nat_gateway" {
 // for private networks to use.
 resource "aws_nat_gateway" "gateway" {
   count         = "${length(var.public_subnets)}"
-  allocation_id = "${element(aws_eip.nat_gateway.*.id, count.index)}"
-  subnet_id     = "${element(aws_subnet.public.*.id, count.index)}"
+  allocation_id = "${aws_eip.nat_gateway.*.id[count.index]}"
+  subnet_id     = "${aws_subnet.public.*.id[count.index]}"
   depends_on    = ["aws_internet_gateway.main", "aws_eip.nat_gateway"]
 }
 
@@ -40,10 +40,6 @@ resource "aws_route_table" "main" {
 resource "aws_route_table" "private" {
   count  = "${length(var.private_subnets)}"
   vpc_id = "${aws_vpc.main.id}"
-
-  tags {
-    Name = "private ${element(aws_subnet.private.*.id, count.index)}, 0.0.0.0/0 ⇢ ${element(aws_nat_gateway.gateway.*.id, count.index)}"
-  }
 }
 
 // Allows public subnets to use the internet gateway.
@@ -57,7 +53,7 @@ resource "aws_route" "public" {
 // traffic.
 resource "aws_route" "nat" {
   count                  = "${length(var.private_subnets)}"
-  route_table_id         = "${element(aws_route_table.private.*.id, count.index)}"
+  route_table_id         = "${aws_route_table.private.*.id[count.index]}"
   destination_cidr_block = "0.0.0.0/0"
   nat_gateway_id         = "${element(aws_nat_gateway.gateway.*.id, count.index)}"
 }
@@ -95,7 +91,7 @@ resource "aws_subnet" "private" {
 // Associates public subnets to main routing table.
 resource "aws_route_table_association" "public" {
   count          = "${length(var.public_subnets)}"
-  subnet_id      = "${element(aws_subnet.public.*.id, count.index)}"
+  subnet_id      = "${aws_subnet.public.*.id[count.index]}"
   route_table_id = "${aws_route_table.main.id}"
 }
 
@@ -109,6 +105,6 @@ resource "aws_route_table_association" "public" {
 // since we can't specify the origin network in AWS routing rules.
 resource "aws_route_table_association" "private" {
   count          = "${length(var.private_subnets)}"
-  subnet_id      = "${element(aws_subnet.private.*.id, count.index)}"
-  route_table_id = "${element(aws_route_table.private.*.id, count.index)}"
+  subnet_id      = "${aws_subnet.private.*.id[count.index]}"
+  route_table_id = "${aws_route_table.private.*.id[count.index]}"
 }
