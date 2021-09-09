@@ -22,7 +22,7 @@ resource "aws_nat_gateway" "gateway" {
   count         = "${length(var.public_subnets)}"
   allocation_id = "${aws_eip.nat_gateway.*.id[count.index]}"
   subnet_id     = "${aws_subnet.public.*.id[count.index]}"
-  depends_on    = ["aws_internet_gateway.main", "aws_eip.nat_gateway"]
+  depends_on    = [aws_internet_gateway.main, aws_eip.nat_gateway]
 }
 
 resource "aws_route_table" "main" {
