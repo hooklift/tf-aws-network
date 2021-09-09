@@ -28,7 +28,7 @@ resource "aws_nat_gateway" "gateway" {
 resource "aws_route_table" "main" {
   vpc_id = "${aws_vpc.main.id}"
 
-  tags {
+  tags = {
     Name = "main"
   }
 }
@@ -71,7 +71,7 @@ resource "aws_subnet" "public" {
   availability_zone       = "${element(var.zones, count.index)}"
   map_public_ip_on_launch = true
 
-  tags {
+  tags = {
     Name = "public-zone-${count.index+1}"
   }
 }
@@ -83,7 +83,7 @@ resource "aws_subnet" "private" {
   availability_zone       = "${element(var.zones, count.index)}"
   map_public_ip_on_launch = false
 
-  tags {
+  tags = {
     Name = "private-zone-${count.index+1}"
   }
 }
